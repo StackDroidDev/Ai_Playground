@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prompt Playground - Groq</title>
+  <title>NPP | Nexus Prime Playground</title>
+  <!-- Favicon generated as inline SVG data URI using the NPP hexagon logo design -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,4 90,27 90,73 50,96 10,73 10,27' fill='%2305060f' stroke='%2300f0ff' stroke-width='4'/%3E%3Cpath d='M30,72 L30,28 L70,72 L70,28' fill='none' stroke='%2300f0ff' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M30,28 L70,72' fill='none' stroke='%23ff2bd6' stroke-width='8' stroke-linecap='round'/%3E%3Cpolygon points='90,27 94,22 100,27 94,32' fill='%2300f0ff'/%3E%3C/svg%3E">
+
   <style>
     /* ==========================================================================
-       0. CSS THEME, PALETTES & HIGH-PERFORMANCE NEON STYLES
+       0. CSS VARIABLES, THEMES & NEON LIGHTWEIGHT ENGINE
        ========================================================================== */
     :root {
       --bg-void: #05060f;
@@ -21,24 +24,35 @@
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      /* Default Accent: Cyan */
-      --neon-accent: #00f0ff;
+      
+      /* Neon Palette Defaults (Cyan active) */
+      --neon-cyan: #00f0ff;
+      --neon-magenta: #ff2bd6;
+      --neon-purple: #8a5cff;
+      --neon-green: #00ff66;
+      --neon-orange: #ffaa00;
+
+      --neon-accent: var(--neon-cyan);
+      --neon-contrast: var(--neon-magenta);
       --neon-glow: 0 0 12px rgba(0, 240, 255, 0.45);
       --neon-alpha: rgba(0, 240, 255, 0.12);
     }
 
     [data-theme="magenta"] {
       --neon-accent: #ff2bd6;
+      --neon-contrast: #00f0ff;
       --neon-glow: 0 0 12px rgba(255, 43, 214, 0.45);
       --neon-alpha: rgba(255, 43, 214, 0.12);
     }
     [data-theme="green"] {
       --neon-accent: #00ff66;
+      --neon-contrast: #ff2bd6;
       --neon-glow: 0 0 12px rgba(0, 255, 102, 0.45);
       --neon-alpha: rgba(0, 255, 102, 0.12);
     }
     [data-theme="purple"] {
       --neon-accent: #8a5cff;
+      --neon-contrast: #00f0ff;
       --neon-glow: 0 0 12px rgba(138, 92, 255, 0.45);
       --neon-alpha: rgba(138, 92, 255, 0.12);
     }
@@ -51,7 +65,7 @@
       background-image:
         linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.06), transparent 70%);
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.05), transparent 70%);
       background-size: 32px 32px, 32px 32px, 100% 100%;
       color: var(--text-main);
       height: 100vh;
@@ -61,7 +75,7 @@
       font-size: 13.5px;
     }
 
-    /* Hardware accelerated animation discipline */
+    /* Common interactive styling */
     button, input, select, textarea {
       font-family: inherit;
       border-radius: var(--radius-sm);
@@ -136,9 +150,8 @@
       border-color: var(--neon-accent);
       box-shadow: 0 0 0 2px var(--neon-alpha), var(--neon-glow);
     }
-    input:disabled, select:disabled, textarea:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    /* Switch */
+    /* Switch toggle */
     .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider-toggle {
@@ -165,7 +178,7 @@
       background: var(--neon-accent); cursor: pointer; box-shadow: var(--neon-glow);
     }
 
-    /* Badges & Pills */
+    /* Tags */
     .tag-pill {
       font-size: 10.5px;
       font-family: var(--font-mono);
@@ -181,7 +194,47 @@
     .tag-arabic { background: rgba(255, 170, 0, 0.15); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.3); }
 
     /* ==========================================================================
-       0. LIGHT INTRO ANIMATION SCREEN (~2.5s)
+       SVG LOGO COMPONENT STYLING
+       ========================================================================== */
+    .npp-logo-svg {
+      display: inline-block;
+      overflow: visible;
+    }
+    .npp-logo-svg .logo-hex {
+      fill: #05060f;
+      stroke: var(--neon-accent);
+      stroke-width: 4;
+      transition: stroke 0.2s ease, filter 0.2s ease;
+    }
+    .npp-logo-svg .logo-n-outer {
+      fill: none;
+      stroke: var(--neon-accent);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.2s ease;
+    }
+    .npp-logo-svg .logo-n-diag {
+      fill: none;
+      stroke: var(--neon-contrast);
+      stroke-width: 8;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 6px var(--neon-contrast));
+      transition: stroke 0.2s ease, filter 0.2s ease;
+    }
+    .npp-logo-svg .logo-spark {
+      fill: var(--neon-accent);
+      filter: drop-shadow(0 0 4px var(--neon-accent));
+      transition: fill 0.2s ease;
+    }
+
+    /* Top bar logo hover pulse */
+    .topbar-logo:hover .logo-hex {
+      filter: drop-shadow(0 0 8px var(--neon-accent));
+    }
+
+    /* ==========================================================================
+       0. INTRO ANIMATION SCREEN (~2.5s)
        ========================================================================== */
     #intro-screen {
       position: fixed; inset: 0;
@@ -208,16 +261,38 @@
       position: relative; z-index: 10;
       display: flex; flex-direction: column; align-items: center; gap: 14px;
     }
+
+    /* Intro logo draw animation */
+    .intro-logo .logo-hex {
+      stroke-dasharray: 280;
+      stroke-dashoffset: 280;
+      animation: drawHex 0.8s ease-out forwards;
+    }
+    .intro-logo .logo-n-outer, .intro-logo .logo-n-diag {
+      opacity: 0;
+      animation: fadeInN 0.5s 0.7s forwards;
+    }
+    .intro-logo .logo-spark {
+      opacity: 0;
+      transform: scale(0);
+      transform-origin: 94px 26px;
+      animation: popSpark 0.4s 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes drawHex { to { stroke-dashoffset: 0; } }
+    @keyframes fadeInN { to { opacity: 1; } }
+    @keyframes popSpark { to { opacity: 1; transform: scale(1); } }
+
     .intro-log {
-      font-family: var(--font-mono); font-size: 14px; color: var(--neon-accent);
-      min-height: 68px; text-shadow: var(--neon-glow);
+      font-family: var(--font-mono); font-size: 13.5px; color: var(--neon-accent);
+      min-height: 64px; text-shadow: var(--neon-glow);
     }
     .intro-title-text {
-      font-family: var(--font-mono); font-size: 30px; font-weight: 800;
+      font-family: var(--font-mono); font-size: 26px; font-weight: 800;
       letter-spacing: 4px; text-shadow: var(--neon-glow); opacity: 0;
-      animation: titleFlicker 0.6s 1.3s forwards;
+      animation: titleGlitch 0.6s 1.4s forwards;
+      text-align: center;
     }
-    @keyframes titleFlicker {
+    @keyframes titleGlitch {
       0% { opacity: 0; transform: scale(0.96); }
       40% { opacity: 0.9; }
       60% { opacity: 0.5; }
@@ -230,6 +305,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .intro-grid { animation: none; }
+      .intro-logo .logo-hex { stroke-dashoffset: 0; animation: none; }
+      .intro-logo .logo-n-outer, .intro-logo .logo-n-diag, .intro-logo .logo-spark { opacity: 1; transform: none; animation: none; }
       .intro-title-text { animation: none; opacity: 1; }
     }
 
@@ -246,7 +323,7 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 36px 30px;
+      padding: 38px 32px;
       width: 100%; max-width: 440px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
       text-align: center;
@@ -267,12 +344,9 @@
       20%, 60% { transform: translateX(-8px); }
       40%, 80% { transform: translateX(8px); }
     }
-    .gate-badge {
-      width: 52px; height: 52px; border-radius: 12px;
-      background: var(--neon-alpha); border: 1px solid var(--neon-accent);
-      color: var(--neon-accent); box-shadow: var(--neon-glow);
-      display: inline-flex; align-items: center; justify-content: center;
-      margin-bottom: 18px; font-size: 24px;
+    .gate-logo-wrap {
+      margin-bottom: 14px;
+      display: inline-block;
     }
 
     /* ==========================================================================
@@ -285,7 +359,6 @@
       overflow: hidden;
     }
 
-    /* Top Bar */
     header {
       height: 52px;
       background: var(--bg-surface);
@@ -293,11 +366,19 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 16px; flex-shrink: 0; gap: 12px;
     }
-    .brand-title {
+    .brand-wrap {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand-name {
       font-family: var(--font-mono); font-weight: 800; font-size: 15px;
       color: var(--neon-accent); text-shadow: var(--neon-glow);
-      display: flex; align-items: center; gap: 8px;
     }
+    .brand-name .short-label { display: none; }
+    @media (max-width: 640px) {
+      .brand-name .full-label { display: none; }
+      .brand-name .short-label { display: inline; }
+    }
+
     .token-counter-badge {
       font-family: var(--font-mono); font-size: 11px;
       padding: 3px 8px; border-radius: 12px;
@@ -360,6 +441,17 @@
       background: rgba(0, 0, 0, 0.2);
     }
 
+    /* Empty Chat Screen with faded logo */
+    .empty-chat-screen {
+      margin: auto; text-align: center; color: var(--text-muted); max-width: 440px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      opacity: 0.75;
+    }
+    .empty-chat-screen .faded-logo {
+      opacity: 0.25;
+      filter: drop-shadow(0 0 10px var(--neon-accent));
+    }
+
     /* Messages */
     .msg-wrap {
       display: flex; flex-direction: column; max-width: 860px; width: 100%; margin: 0 auto; gap: 4px;
@@ -393,7 +485,6 @@
       border-bottom-left-radius: 2px;
     }
 
-    /* Blinking Neon Cursor & Loading Dots */
     .neon-cursor {
       display: inline-block; width: 8px; height: 15px; background: var(--neon-accent);
       vertical-align: middle; margin-left: 4px; animation: cursorBlink 0.7s infinite;
@@ -443,7 +534,7 @@
     }
     .thought-box.open .thought-body { display: block; }
 
-    /* Notice Banner (Auto-Recovery & Arabic) */
+    /* Notice Banner */
     .auto-notice-banner {
       background: rgba(255, 170, 0, 0.12); border: 1px solid rgba(255, 170, 0, 0.35);
       color: #ffc44d; padding: 6px 12px; border-radius: var(--radius-sm);
@@ -517,7 +608,13 @@
     .modal-body { padding: 14px 16px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     .modal-foot { padding: 10px 16px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 8px; }
 
-    /* Responsive */
+    /* Footer */
+    footer.app-footer {
+      height: 22px; background: #04050b; border-top: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10.5px; color: var(--text-muted); font-family: var(--font-mono);
+    }
+
     @media (max-width: 900px) {
       .sidebar-left { position: absolute; left: 0; top: 0; bottom: 0; z-index: 100; box-shadow: 10px 0 25px rgba(0,0,0,0.7); }
       .settings-panel { position: absolute; right: 0; top: 0; bottom: 0; z-index: 100; box-shadow: -10px 0 25px rgba(0,0,0,0.7); }
@@ -527,13 +624,22 @@
 <body data-theme="cyan">
 
   <!-- ==========================================================================
-       0. LIGHT INTRO SCREEN (~2.5s)
+       0. INTRO ANIMATION SCREEN (~2.5s)
        ========================================================================== -->
   <div id="intro-screen">
     <div class="intro-grid"></div>
     <div class="intro-box">
+      <!-- (1) Logo in Intro Animation -->
+      <div class="intro-logo">
+        <svg class="npp-logo-svg" width="80" height="80" viewBox="0 0 100 100">
+          <polygon class="logo-hex" points="50,4 90,27 90,73 50,96 10,73 10,27"/>
+          <path class="logo-n-outer" d="M30,72 L30,28 L70,72 L70,28"/>
+          <path class="logo-n-diag" d="M30,28 L70,72"/>
+          <polygon class="logo-spark" points="90,27 94,21 100,27 94,33"/>
+        </svg>
+      </div>
       <div id="intro-log" class="intro-log"></div>
-      <div class="intro-title-text">PROMPT PLAYGROUND</div>
+      <div class="intro-title-text">NEXUS PRIME PLAYGROUND</div>
     </div>
     <button id="skip-intro-btn" class="btn-ghost intro-skip-btn">SKIP [ESC]</button>
   </div>
@@ -543,9 +649,18 @@
        ========================================================================== -->
   <div id="gate-screen" style="display: none;">
     <div id="gate-card" class="gate-card">
-      <div class="gate-badge">⚡</div>
-      <h1 style="font-family: var(--font-mono); font-size: 20px; margin-bottom: 6px;">PROMPT PLAYGROUND</h1>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 22px;">High-Speed Groq LPU™ Inference Console</p>
+      <!-- (2) Logo in API Key Gate -->
+      <div class="gate-logo-wrap">
+        <svg class="npp-logo-svg" width="60" height="60" viewBox="0 0 100 100">
+          <polygon class="logo-hex" points="50,4 90,27 90,73 50,96 10,73 10,27"/>
+          <path class="logo-n-outer" d="M30,72 L30,28 L70,72 L70,28"/>
+          <path class="logo-n-diag" d="M30,28 L70,72"/>
+          <polygon class="logo-spark" points="90,27 94,21 100,27 94,33"/>
+        </svg>
+      </div>
+
+      <h1 style="font-family: var(--font-mono); font-size: 20px; margin-bottom: 4px; letter-spacing: 1px;">NEXUS PRIME PLAYGROUND</h1>
+      <p style="font-size: 13px; color: var(--neon-accent); margin-bottom: 22px; font-weight: 500;">Your gateway to fast AI</p>
 
       <div style="position: relative; margin-bottom: 14px;">
         <input type="password" id="gate-key-input" placeholder="Paste your Groq API key (gsk_...)" autocomplete="off" style="padding-right: 60px;">
@@ -553,7 +668,7 @@
       </div>
 
       <button id="gate-connect-btn" class="btn-neon" style="width: 100%; padding: 10px;">
-        <span id="gate-btn-label">Connect Engine</span>
+        <span id="gate-btn-label">Connect</span>
       </button>
 
       <div id="gate-error" style="display: none; background: rgba(255, 51, 85, 0.15); border: 1px solid rgba(255, 51, 85, 0.4); color: #ff99aa; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 12.5px; margin-top: 14px; text-align: left;"></div>
@@ -570,15 +685,27 @@
   <div id="playground-app">
     <!-- Top Bar -->
     <header>
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="brand-wrap">
         <button id="toggle-sidebar-btn" class="btn-ghost" title="Toggle Sidebar">☰</button>
-        <div class="brand-title"><span>⚡</span> PROMPT PLAYGROUND</div>
+        <!-- (3) Logo in Top Bar -->
+        <div class="topbar-logo" style="display: flex; align-items: center;">
+          <svg class="npp-logo-svg" width="28" height="28" viewBox="0 0 100 100">
+            <polygon class="logo-hex" points="50,4 90,27 90,73 50,96 10,73 10,27"/>
+            <path class="logo-n-outer" d="M30,72 L30,28 L70,72 L70,28"/>
+            <path class="logo-n-diag" d="M30,28 L70,72"/>
+            <polygon class="logo-spark" points="90,27 94,21 100,27 94,33"/>
+          </svg>
+        </div>
+        <div class="brand-name">
+          <span class="full-label">NEXUS PRIME PLAYGROUND</span>
+          <span class="short-label">NPP</span>
+        </div>
         <div id="session-tokens-pill" class="token-counter-badge" title="Total Session Tokens">Tokens: 0</div>
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
-        <!-- Filtered Model Dropdown in Top Bar -->
-        <select id="top-model-select" style="max-width: 240px; font-family: var(--font-mono); font-size: 12px;"></select>
+        <!-- Filtered Chat Models Dropdown -->
+        <select id="top-model-select" style="max-width: 230px; font-family: var(--font-mono); font-size: 12px;"></select>
 
         <button id="compare-mode-btn" class="btn-secondary" title="Compare two models">
           <span>Compare</span>
@@ -594,7 +721,7 @@
       </div>
     </header>
 
-    <!-- Workspace -->
+    <!-- Workspace Body -->
     <div class="main-body">
       <!-- Left Sidebar (Chats & Saved Prompts) -->
       <aside id="sidebar-left" class="sidebar-left">
@@ -628,14 +755,14 @@
 
       <!-- Center Chat Area -->
       <main class="center-chat-area">
-        <!-- Model Notice Banner (Arabic or Auto-Recovery Notice) -->
+        <!-- Notice Banner for Arabic / Auto-Recovery -->
         <div id="model-notice-banner" class="auto-notice-banner" style="margin: 10px 20px 0 20px;"></div>
 
         <div class="chat-columns-container">
-          <!-- Primary Column A -->
+          <!-- Primary Chat Column A -->
           <div id="chat-column-a" class="chat-column"></div>
 
-          <!-- Compare Column B -->
+          <!-- Secondary Compare Column B -->
           <div id="chat-column-b" class="chat-column compare-b" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 6px;">
               <span style="font-size: 12px; font-weight: 600; color: var(--neon-accent);">Model B</span>
@@ -715,7 +842,7 @@
             <button id="reset-defaults-btn" class="btn-ghost" style="font-size: 11px; padding: 2px 6px;">Reset to defaults</button>
           </div>
 
-          <!-- Neon Theme Color Switcher -->
+          <!-- Neon Theme Color Switcher (Cyan, Magenta, Green, Purple) -->
           <div class="setting-item">
             <label class="setting-label">Neon Accent Color</label>
             <div style="display: flex; gap: 6px;">
@@ -857,6 +984,11 @@
         </div>
       </aside>
     </div>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      NPP v1.0 - Nexus Prime Playground
+    </footer>
   </div>
 
   <!-- ==========================================================================
@@ -926,16 +1058,16 @@
       'use strict';
 
       // --- Storage & Session Keys ---
-      const SESSION_KEY = 'groq_api_key_v4';
-      const SESSION_INTRO = 'groq_intro_v4';
-      const STORAGE_CHATS = 'groq_chats_v4';
-      const STORAGE_SAVED = 'groq_saved_prompts_v4';
-      const STORAGE_PRESETS = 'groq_presets_v4';
-      const STORAGE_THEME = 'groq_theme_v4';
+      const SESSION_KEY = 'npp_api_key_v1';
+      const SESSION_INTRO = 'npp_intro_played_v1';
+      const STORAGE_CHATS = 'npp_chats_v1';
+      const STORAGE_SAVED = 'npp_saved_prompts_v1';
+      const STORAGE_PRESETS = 'npp_presets_v1';
+      const STORAGE_THEME = 'npp_theme_v1';
 
       // App state
       let apiKey = '';
-      let modelsDirectory = {}; // model_id -> { context_window, max_completion_tokens, isVision, isReasoning, isArabic }
+      let modelsDirectory = {}; // model_id -> metadata
       let activeChats = [];
       let currentChatId = null;
       let savedPrompts = [];
@@ -950,7 +1082,7 @@
       let attachedImageBase64 = null;
       let sessionTokenCounter = 0;
 
-      // DOM
+      // DOM Elements
       const introScreen = document.getElementById('intro-screen');
       const introLog = document.getElementById('intro-log');
       const skipIntroBtn = document.getElementById('skip-intro-btn');
@@ -1109,7 +1241,7 @@
           return;
         }
 
-        const lines = ['> initializing...', '> connecting to Groq...', '> ready.'];
+        const lines = ['> initializing NPP...', '> connecting to Groq...', '> ready.'];
         let lIdx = 0, cIdx = 0;
 
         function type() {
@@ -1145,7 +1277,7 @@
         if (e.key === 'Escape' && introScreen.style.display !== 'none') dismissIntro();
       });
 
-      // --- 1. GATE AUTHENTICATION & MODEL FILTERING (CRITICAL FIXES) ---
+      // --- 1. GATE AUTHENTICATION & MODEL FILTERING ---
       gateToggleKey.addEventListener('click', () => {
         if (gateKeyInput.type === 'password') {
           gateKeyInput.type = 'text';
@@ -1173,7 +1305,6 @@
             apiKey = key;
             sessionStorage.setItem(SESSION_KEY, key);
 
-            // Filter models strictly per instructions
             processAndPopulateModels(data.data || []);
 
             gateCard.classList.add('unlock-success');
@@ -1192,7 +1323,7 @@
           triggerGateError('Network error connecting to https://api.groq.com');
         } finally {
           gateConnectBtn.disabled = false;
-          gateBtnLabel.textContent = 'Connect Engine';
+          gateBtnLabel.textContent = 'Connect';
         }
       }
 
@@ -1223,7 +1354,6 @@
         gateError.style.display = 'none';
       });
 
-      // Filter & register models
       function processAndPopulateModels(rawModels) {
         modelsDirectory = {};
         topModelSelect.innerHTML = '';
@@ -1241,7 +1371,6 @@
         });
 
         chatModels.sort((a, b) => a.id.localeCompare(b.id));
-
         let defaultSelectedId = null;
 
         chatModels.forEach(m => {
@@ -1251,7 +1380,6 @@
           const isVision = lower.includes('vision') || lower.includes('scout') || lower.includes('maestro');
           const isReasoning = lower.includes('r1') || lower.includes('deepseek') || lower.includes('reason');
 
-          // Read limits from response if provided
           const ctxWindow = m.context_window || 8192;
           const maxCompTokens = m.max_completion_tokens || 4096;
 
@@ -1264,23 +1392,19 @@
             isReasoning
           };
 
-          // Format label with tags
           let tagSuffix = '';
           if (isArabic) tagSuffix += ' [Arabic]';
           if (isVision) tagSuffix += ' [Vision]';
           if (isReasoning) tagSuffix += ' [Reasoning]';
 
           const optA = document.createElement('option');
-          optA.value = id;
-          optA.textContent = id + tagSuffix;
+          optA.value = id; optA.textContent = id + tagSuffix;
           topModelSelect.appendChild(optA);
 
           const optB = document.createElement('option');
-          optB.value = id;
-          optB.textContent = id + tagSuffix;
+          optB.value = id; optB.textContent = id + tagSuffix;
           compareModelSelect.appendChild(optB);
 
-          // Auto-select preference: Llama or GPT-OSS
           if (!defaultSelectedId) {
             if (lower.includes('llama-3.3-70b-versatile')) defaultSelectedId = id;
             else if (lower.includes('llama3-70b') || lower.includes('llama-3.1-70b')) defaultSelectedId = id;
@@ -1288,14 +1412,12 @@
           }
         });
 
-        // Set top model default (never first raw model)
         if (defaultSelectedId) {
           topModelSelect.value = defaultSelectedId;
         } else if (topModelSelect.options.length > 0) {
           topModelSelect.selectedIndex = 0;
         }
 
-        // Secondary compare default
         const secondOpt = Array.from(compareModelSelect.options).find(o => o.value.includes('8b') || o.value !== topModelSelect.value);
         if (secondOpt) compareModelSelect.value = secondOpt.value;
 
@@ -1306,7 +1428,6 @@
         const selectedId = topModelSelect.value;
         const info = modelsDirectory[selectedId] || { max_completion_tokens: 1024, isArabic: false, isVision: false, isReasoning: false };
 
-        // Model limit enforcement
         const limit = info.max_completion_tokens || 1024;
         maxTokensInput.max = limit;
         maxTokensLimitLabel.textContent = `limit: ${limit}`;
@@ -1314,16 +1435,13 @@
           maxTokensInput.value = limit;
         }
 
-        // Reasoning Effort setting visibility
         reasoningEffortGroup.style.display = info.isReasoning ? 'flex' : 'none';
 
-        // Vision attachment support
         visionUploadLabel.style.display = info.isVision ? 'inline-flex' : 'none';
         if (!info.isVision && attachedImageBase64) {
           clearAttachedImage();
         }
 
-        // Arabic model notice
         if (info.isArabic) {
           showModelNotice('This model replies in Arabic by default. Set Reply language to English if needed.');
         } else {
@@ -1429,13 +1547,11 @@
         });
       }
 
-      // Saved prompts list with tag filtering and search
       function renderSavedPrompts() {
         savedPromptsList.innerHTML = '';
         const search = savedSearchInput.value.toLowerCase().trim();
         const tag = savedTagFilter.value;
 
-        // Populate tag options
         const allTags = new Set();
         savedPrompts.forEach(p => (p.tags || []).forEach(t => allTags.add(t)));
         savedTagFilter.innerHTML = '<option value="">All Tags</option>';
@@ -1496,10 +1612,9 @@
       savedSearchInput.addEventListener('input', renderSavedPrompts);
       savedTagFilter.addEventListener('change', renderSavedPrompts);
 
-      // JSON Export/Import for saved prompts
       exportSavedJsonBtn.addEventListener('click', () => {
         const blob = new Blob([JSON.stringify(savedPrompts, null, 2)], { type: 'application/json' });
-        downloadBlob(blob, 'saved_prompts.json');
+        downloadBlob(blob, 'NPP-saved-prompts.json');
       });
 
       importSavedJsonBtn.addEventListener('click', () => savedImportFile.click());
@@ -1542,24 +1657,28 @@
         }
       });
 
-      // --- 3. CHAT MESSAGES & RENDER (Limit to last 100 for high performance) ---
+      // --- 3. CHAT MESSAGES & EMPTY STATE (with 4th Logo occurrence) ---
       function renderChatMessages() {
         chatColumnA.innerHTML = '';
         const chat = getCurrentChat();
         if (!chat || chat.messages.length === 0) {
+          // (4) Big faded logo on empty chat screen
           chatColumnA.innerHTML = `
-            <div style="margin: auto; text-align: center; color: var(--text-muted); max-width: 440px;">
-              <div style="font-size: 28px; margin-bottom: 8px;">⚡</div>
-              <div style="font-weight: 700; font-size: 16px; color: var(--text-main); margin-bottom: 4px;">PROMPT PLAYGROUND</div>
-              <p style="font-size: 13px; line-height: 1.5;">Type a message below to begin. Select inference models and fine-tune hyperparameters in the settings panel.</p>
+            <div class="empty-chat-screen">
+              <svg class="npp-logo-svg faded-logo" width="90" height="90" viewBox="0 0 100 100">
+                <polygon class="logo-hex" points="50,4 90,27 90,73 50,96 10,73 10,27"/>
+                <path class="logo-n-outer" d="M30,72 L30,28 L70,72 L70,28"/>
+                <path class="logo-n-diag" d="M30,28 L70,72"/>
+                <polygon class="logo-spark" points="90,27 94,21 100,27 94,33"/>
+              </svg>
+              <div style="font-weight: 700; font-size: 16px; color: var(--text-main); font-family: var(--font-mono);">Welcome to NPP. Ask anything.</div>
+              <p style="font-size: 13px; line-height: 1.5;">Ultra-fast inference enabled by Groq. Configure parameters or compare models above.</p>
             </div>
           `;
           return;
         }
 
-        // Performance rule: render only the last 100 messages
         const displayMessages = chat.messages.slice(-100);
-
         displayMessages.forEach((msg, idx) => {
           const el = createMessageElement(msg, idx);
           chatColumnA.appendChild(el);
@@ -1583,7 +1702,6 @@
         const bubbleBox = document.createElement('div');
         bubbleBox.className = 'msg-bubble-box';
 
-        // Thinking Collapsible
         if (msg.thinking) {
           const tBox = document.createElement('div');
           tBox.className = 'thought-box';
@@ -1597,7 +1715,6 @@
           bubbleBox.appendChild(tBox);
         }
 
-        // Image attached thumbnail if present
         if (msg.imageBase64) {
           const imgEl = document.createElement('img');
           imgEl.src = msg.imageBase64;
@@ -1605,7 +1722,6 @@
           bubbleBox.appendChild(imgEl);
         }
 
-        // Main Bubble
         const bubble = document.createElement('div');
         bubble.className = 'msg-bubble md-content';
 
@@ -1616,7 +1732,6 @@
         bubble.innerHTML = contentHtml;
         bubbleBox.appendChild(bubble);
 
-        // Meta Bar (Tokens, Speed & Action Tools)
         const meta = document.createElement('div');
         meta.className = 'msg-meta-bar';
 
@@ -1632,8 +1747,7 @@
         }
 
         const actionsDiv = document.createElement('div');
-        actionsDiv.style.display = 'flex';
-        actionsDiv.style.gap = '4px';
+        actionsDiv.style.display = 'flex'; actionsDiv.style.gap = '4px';
 
         const copyBtn = document.createElement('button');
         copyBtn.className = 'btn-ghost';
@@ -1697,7 +1811,6 @@
           stream: stream
         };
 
-        // System prompt with silent language instruction
         let sysPromptText = systemPrompt.value.trim();
         const lang = replyLanguageSelect.value;
         if (lang !== 'Auto') {
@@ -1707,7 +1820,6 @@
           payload.messages.push({ role: 'system', content: sysPromptText });
         }
 
-        // Messages formatting (support multimodal image content if vision model)
         messagesList.forEach(m => {
           if (m.imageBase64 && info.isVision) {
             payload.messages.push({
@@ -1722,22 +1834,15 @@
           }
         });
 
-        // Stop chips
         if (stopChips.length > 0) payload.stop = stopChips.slice(0, 4);
-
-        // Seed
         const seedVal = seedInput.value.trim();
         if (seedVal !== '') payload.seed = parseInt(seedVal, 10);
-
-        // Response format
         if (responseFormatSelect.value === 'json_object') payload.response_format = { type: 'json_object' };
 
-        // Reasoning Effort (Only send if reasoning model)
         if (info.isReasoning) {
           payload.reasoning_effort = reasoningEffortSelect.value;
         }
 
-        // Custom Tool Calling
         if (toolEnableToggle.checked) {
           const tName = toolNameInput.value.trim();
           if (tName) {
@@ -1772,7 +1877,6 @@
           saveChats();
         }
 
-        // Add user message
         const userMsg = {
           id: 'msg_' + Date.now(),
           role: 'user',
@@ -1845,7 +1949,7 @@
             signal: signal
           });
 
-          // AUTO-RECOVERY LOGIC for 400 Bad Request
+          // AUTO-RECOVERY LOGIC
           if (res.status === 400 && !isRetry) {
             let errorText = '';
             try {
@@ -1857,7 +1961,6 @@
             let retryStream = stream;
             let overrideTokens = null;
 
-            // Check if error is max tokens, streaming, or unsupported parameter
             if (errorText.includes('max_tokens') || errorText.includes('tokens')) {
               const modelLimit = modelsDirectory[modelName]?.max_completion_tokens || 1024;
               overrideTokens = Math.min(1024, modelLimit);
@@ -1871,7 +1974,7 @@
 
             if (shouldRetry) {
               showModelNotice('Adjusted settings for this model.');
-              if (saveToActive) chat.messages.pop(); // Remove failed placeholder
+              if (saveToActive) chat.messages.pop();
               return await executeModelCall(modelName, targetCol, signal, retryStream, saveToActive, true);
             }
           }
@@ -1887,7 +1990,6 @@
             return;
           }
 
-          // Handle Streaming
           if (stream) {
             const reader = res.body.getReader();
             const decoder = new TextDecoder('utf-8');
@@ -1928,7 +2030,6 @@
               if (saveToActive) renderChatMessages();
             }
           } else {
-            // Non-stream
             const data = await res.json();
             const choice = data.choices && data.choices[0];
             if (choice && choice.message) {
@@ -1981,7 +2082,7 @@
 
       sendBtn.addEventListener('click', handleSend);
 
-      // Keyboard shortcuts: Ctrl+Enter (or Cmd+Enter) sends, Ctrl+K new chat
+      // Keyboard shortcuts: Ctrl+Enter sends, Ctrl+K new chat
       window.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
           e.preventDefault();
@@ -2000,7 +2101,6 @@
         }
       });
 
-      // Regenerate message
       function regenerateFrom(idx) {
         if (isGenerating) return;
         const chat = getCurrentChat();
@@ -2023,7 +2123,6 @@
         });
       }
 
-      // Edit Message Modal
       function openEditModal(idx) {
         const chat = getCurrentChat();
         if (!chat || !chat.messages[idx]) return;
@@ -2065,7 +2164,7 @@
         }
       });
 
-      // --- 6. PROMPT SHORTENER WITH STYLES ---
+      // --- 6. PROMPT SHORTENER ---
       shortenPromptBtn.addEventListener('click', async () => {
         const p = promptInput.value.trim();
         if (!p) { alert('Type a prompt in the input box first.'); return; }
@@ -2147,7 +2246,7 @@
         alert('Prompt saved to Saved Prompts!');
       });
 
-      // --- 7. IMAGE UPLOAD FOR VISION MODELS (BASE64) ---
+      // --- 7. IMAGE UPLOAD FOR VISION MODELS ---
       visionFileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -2168,7 +2267,7 @@
         visionFileInput.value = '';
       }
 
-      // --- 8. STOP SEQUENCES CHIPS (MAX 4) ---
+      // --- 8. STOP SEQUENCES CHIPS ---
       chipInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ',') {
           e.preventDefault();
@@ -2196,11 +2295,9 @@
         chipInput.style.display = stopChips.length >= 4 ? 'none' : 'inline-block';
       }
 
-      // Slider feedback
       tempSlider.addEventListener('input', (e) => tempVal.textContent = parseFloat(e.target.value).toFixed(1));
       toppSlider.addEventListener('input', (e) => toppVal.textContent = parseFloat(e.target.value).toFixed(2));
 
-      // JSON system prompt warning check
       function checkJsonPrompt() {
         if (responseFormatSelect.value === 'json_object') {
           const text = systemPrompt.value.toUpperCase();
@@ -2212,12 +2309,10 @@
       responseFormatSelect.addEventListener('change', checkJsonPrompt);
       systemPrompt.addEventListener('input', checkJsonPrompt);
 
-      // Tool Calling Toggle
       toolEnableToggle.addEventListener('change', () => {
         toolDetailsBox.style.display = toolEnableToggle.checked ? 'flex' : 'none';
       });
 
-      // Compare Mode Toggle
       compareModeBtn.addEventListener('click', () => {
         isCompareMode = !isCompareMode;
         if (isCompareMode) {
@@ -2231,7 +2326,6 @@
         }
       });
 
-      // Reset to defaults
       resetDefaultsBtn.addEventListener('click', () => {
         tempSlider.value = '0.7'; tempVal.textContent = '0.7';
         toppSlider.value = '1.0'; toppVal.textContent = '1.0';
@@ -2292,7 +2386,7 @@
         applyModelLimitsAndUI();
       });
 
-      // --- 10. NEON ACCENT THEME SWITCHER ---
+      // --- 10. NEON ACCENT THEME SWITCHER (CYAN, MAGENTA, GREEN, PURPLE) ---
       document.querySelectorAll('.theme-pick-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const col = btn.getAttribute('data-color');
@@ -2366,26 +2460,26 @@ console.log(data);`;
         setTimeout(() => copyCodeBtn.textContent = 'Copy Snippet', 1200);
       });
 
-      // --- 12. EXPORT CHAT MODAL ---
+      // --- 12. EXPORT CHAT MODAL (NPP-chat- prefix) ---
       exportChatBtn.addEventListener('click', () => exportChatModal.classList.add('open'));
 
       exportJsonBtn.addEventListener('click', () => {
         const chat = getCurrentChat();
         if (!chat) return;
         const blob = new Blob([JSON.stringify(chat, null, 2)], { type: 'application/json' });
-        downloadBlob(blob, `${chat.title.replace(/\s+/g, '_')}.json`);
+        downloadBlob(blob, `NPP-chat-${chat.title.replace(/\s+/g, '_')}.json`);
         exportChatModal.classList.remove('open');
       });
 
       exportMdBtn.addEventListener('click', () => {
         const chat = getCurrentChat();
         if (!chat) return;
-        let md = `# ${chat.title}\n*Exported on ${new Date().toLocaleString()}*\n\n---\n\n`;
+        let md = `# ${chat.title}\n*Exported from Nexus Prime Playground on ${new Date().toLocaleString()}*\n\n---\n\n`;
         chat.messages.forEach(m => {
           md += `### ${m.role === 'user' ? 'User' : 'Assistant'}\n\n${m.content}\n\n`;
         });
         const blob = new Blob([md], { type: 'text/markdown' });
-        downloadBlob(blob, `${chat.title.replace(/\s+/g, '_')}.md`);
+        downloadBlob(blob, `NPP-chat-${chat.title.replace(/\s+/g, '_')}.md`);
         exportChatModal.classList.remove('open');
       });
 
@@ -2396,7 +2490,6 @@ console.log(data);`;
         URL.revokeObjectURL(url);
       }
 
-      // Close modal events
       document.querySelectorAll('.modal-close-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const t = btn.getAttribute('data-target');
